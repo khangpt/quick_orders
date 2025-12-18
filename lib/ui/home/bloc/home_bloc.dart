@@ -15,9 +15,6 @@ class HomeBloc extends Cubit<HomeState> {
   }
 
   void addToCart(Product p) {
-    print('+++ add to cart:');
-    print('+++ product: $p:');
-    print('+++ carts: ${state.carts}');
     if (state.carts.any((element) => element.id == p.id)) {
       var item = state.carts.firstWhereOrNull((element) => element.id == p.id);
       item = item!.copyWith(count: item.count + 1);

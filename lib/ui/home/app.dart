@@ -118,6 +118,24 @@ class _MyHomePageState extends State<MyHomePage> {
                     Text(
                       'Total price in cart: ${NumberFormat.currency(locale: 'vi').format(state.totalPriceInCart)}',
                     ),
+                    SizedBox(height: 4),
+                    Expanded(
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          final item = state.carts[index];
+
+                          return Column(
+                            children: [
+                              Text('${item.name}'),
+                              Text('${item.count}', style: TextStyle(fontWeight: FontWeight.bold)),
+                            ],
+                          );
+                        },
+                        separatorBuilder: (context, index) => SizedBox(width: 12),
+                        itemCount: state.carts.length,
+                      ),
+                    ),
                   ],
                 ),
               ),

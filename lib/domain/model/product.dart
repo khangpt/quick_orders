@@ -28,7 +28,7 @@ class Product extends Equatable {
   final int count;
 
   @override
-  List<Object?> get props => [id, name, price, category, isPrescription];
+  List<Object?> get props => [id, name, price, category, isPrescription, count];
 
   factory Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);
 }
