@@ -1,11 +1,14 @@
-## quick_orders
+## Quick Orders - How to Run
 
-Buymed Testing
+- Open terminal
+- Type "make get" to get all dependencies
+- Type "make gen" to generate all needed auto-generative code
+- Type "make run" to start to run debug
 
-## Deliverables:
+## Framework
 
-Source code.
-Short README:
-How to run.
-Which framework & state management you used.
-Any trade-offs (e.g., what you would improve if you had more time).
+- Flutter version 3.35.0
+
+## State Management
+
+- Flutter Bloc: 9.1

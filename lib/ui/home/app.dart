@@ -13,6 +13,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late final _bloc = HomeBloc();
+  late final _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -23,6 +24,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void dispose() {
     _bloc.close();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -32,17 +34,83 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text('Quick Orders'),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              final filter = await showModalBottomSheet<String>(
+                context: context,
+                builder: (context) {
+                  return BottomSheet(
+                    constraints: BoxConstraints(maxHeight: 350),
+                    onClosing: () {},
+                    builder: (context) {
+                      return Padding(
+                        padding: EdgeInsets.all(12),
+                        child: Column(
+                          spacing: 12,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () => Navigator.of(context).pop(''),
+                              child: Text('All'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () => Navigator.of(context).pop('Pain Relief'),
+                              child: Text('Pain Relief'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () => Navigator.of(context).pop('Antibiotic'),
+                              child: Text('Antibiotic'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () => Navigator.of(context).pop('Supplement'),
+                              child: Text('Supplement'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () => Navigator.of(context).pop('Allergy'),
+                              child: Text('Allergy'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+              );
+              _bloc.filter(filter);
+            },
+            icon: Icon(Icons.filter_alt),
+          ),
+        ],
       ),
       body: CustomScrollView(
         slivers: [
+          SliverToBoxAdapter(
+            child: TextFormField(
+              controller: _searchController,
+              decoration: InputDecoration(hintText: 'Search by name...'),
+              onChanged: (value) => _bloc.search(value),
+            ),
+          ),
           BlocBuilder<HomeBloc, HomeState>(
             bloc: _bloc,
-            buildWhen: (previous, current) => previous.products != current.products,
+            buildWhen: (previous, current) => previous.searchings != current.searchings,
             builder: (context, state) {
+              if (state.searchings.isEmpty) {
+                return SliverToBoxAdapter(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 200),
+                      Icon(Icons.shopping_cart_outlined, size: 120, color: Colors.grey.shade300),
+                    ],
+                  ),
+                );
+              }
+
               return SliverList.builder(
-                itemCount: state.products.length,
+                itemCount: state.searchings.length,
                 itemBuilder: (context, index) {
-                  final p = state.products[index];
+                  final p = state.searchings[index];
 
                   return Padding(
                     padding: EdgeInsets.all(12),
